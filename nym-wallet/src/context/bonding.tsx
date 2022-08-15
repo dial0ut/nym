@@ -34,6 +34,24 @@ import { useCheckOwnership } from '../hooks/useCheckOwnership';
 import { AppContext } from './main';
 import { attachDefaultOperatingCost, toPercentFloatString, toPercentIntegerString } from '../utils';
 
+const bonded: TBondedMixnode = {
+  name: 'Monster node',
+  identityKey: 'B2Xx4haarLWMajX8w259oHjtRZsC7nHwagbWrJNiA3QC',
+  bond: { denom: 'nym', amount: '1234' },
+  delegators: 123,
+  operatorRewards: { denom: 'nym', amount: '12' },
+  profitMargin: '10',
+  stake: { denom: 'nym', amount: '99' },
+  stakeSaturation: '99',
+  status: 'active',
+  operatorCost: 1,
+  host: '1.1.1.1',
+  routingScore: 75, // TODO hard code these values for now
+  activeSetProbability: 42,
+  standbySetProbability: 24,
+  estimatedRewards: { denom: 'nym', amount: '2' },
+};
+
 // TODO add relevant data
 export type TBondedMixnode = {
   name?: string;
@@ -48,6 +66,10 @@ export type TBondedMixnode = {
   proxy?: string;
   operatorCost?: string;
   host: string;
+  estimatedRewards: DecCoin;
+  activeSetProbability: number;
+  standbySetProbability: number;
+  routingScore: number;
 };
 
 export interface TBondedGateway {
@@ -191,6 +213,10 @@ export const BondingContextProvider = ({ children }: { children?: React.ReactNod
             stakeSaturation,
             operatorCost,
             host: data.bond_information.mix_node.host,
+            routingScore: 75, // TODO hard code these values for now
+            activeSetProbability: 42,
+            standbySetProbability: 24,
+            estimatedRewards: { denom: 'nym', amount: '2' },
           } as TBondedMixnode);
         }
       } catch (e: any) {
