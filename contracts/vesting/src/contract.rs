@@ -1,5 +1,4 @@
 use crate::errors::ContractError;
-use crate::queued_migrations::migrate_config_from_env;
 use crate::storage::{
     account_from_address, locked_pledge_cap, update_locked_pledge_cap, ADMIN,
     MIXNET_CONTRACT_ADDRESS, MIX_DENOM,
@@ -43,11 +42,6 @@ pub fn instantiate(
 
 #[entry_point]
 pub fn migrate(_deps: DepsMut<'_>, _env: Env, _msg: MigrateMsg) -> Result<Response, ContractError> {
-    migrate_config_from_env(_deps, _env, _msg)?;
-    todo!("we'd probably need to explicitly undelegate/unbond everyone here to move to the new system");
-
-    // temporary workaround to shut up linter
-    #[allow(unreachable_code)]
     Ok(Response::default())
 }
 
