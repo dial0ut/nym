@@ -1,12 +1,15 @@
 import React from 'react';
 import { LoadingModal } from 'src/components/Modals/LoadingModal';
-import { Box } from '@mui/material';
 import { BuyContextProvider, useBuyContext } from 'src/context';
+import { Tutorial } from 'src/components/Buy/Tutorial';
 
 const Buy = () => {
   const { isLoading } = useBuyContext();
+  if (isLoading) {
+    return <LoadingModal />;
+  }
 
-  return <Box sx={{ mt: 4 }}>{isLoading && <LoadingModal />}</Box>;
+  return <Tutorial />;
 };
 
 export const BuyPage = () => (
