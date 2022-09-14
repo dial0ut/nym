@@ -1,43 +1,55 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-// import { Console } from 'src/utils/console';
+import { sign } from 'src/requests';
+import { Console } from 'src/utils/console';
 // import { AppContext } from './main';
 
 export type TBuyContext = {
-  isLoading: boolean;
+  loading: boolean;
   error?: string;
+  signMessage: (message: string) => Promise<string | undefined>;
   refresh: () => Promise<void>;
 };
 
 export const BuyContext = createContext<TBuyContext>({
-  isLoading: true,
+  loading: false,
+  signMessage: async () => '',
   refresh: async () => undefined,
 });
 
 export const BuyContextProvider = ({ children }: { children?: React.ReactNode }): JSX.Element => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  const resetState = () => {
-    setError(undefined);
-  };
-
   const refresh = useCallback(async () => {
-    setIsLoading(true);
-    // TODO logic
-    setIsLoading(false);
+    setError(undefined);
   }, []);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
+  const signMessage = async (message: string) => {
+    let signature;
+    setLoading(true);
+    try {
+      signature = await sign(message);
+    } catch (e: any) {
+      Console.log(`Sign message operation failed: ${e}`);
+      setError(`Sign message operation failed: ${e}`);
+    } finally {
+      setLoading(false);
+    }
+    return signature;
+  };
+
   const memoizedValue = useMemo(
     () => ({
-      isLoading,
+      loading,
       error,
       refresh,
+      signMessage,
     }),
-    [isLoading, error],
+    [loading, error],
   );
 
   return <BuyContext.Provider value={memoizedValue}>{children}</BuyContext.Provider>;

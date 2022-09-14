@@ -1,32 +1,34 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BuyContext } from '../buy';
+import { mockSleep } from './utils';
 
 export const MockBuyContextProvider = ({ children }: { children?: React.ReactNode }): JSX.Element => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  const resetState = () => {
-    setError(undefined);
-  };
-
   const refresh = useCallback(async () => {
-    setIsLoading(true);
-    // TODO logic
-    setIsLoading(false);
+    setError(undefined);
   }, []);
 
+  const signMessage = async (message: string) => {
+    setLoading(true);
+    await mockSleep(1042);
+    setLoading(false);
+    return `imagineareallyrealisticsignaturehash${message}`;
+  };
+
   useEffect(() => {
-    resetState();
     refresh();
   }, [refresh]);
 
   const memoizedValue = useMemo(
     () => ({
-      isLoading,
+      loading,
       error,
       refresh,
+      signMessage,
     }),
-    [isLoading, error],
+    [loading, error],
   );
 
   return <BuyContext.Provider value={memoizedValue}>{children}</BuyContext.Provider>;
