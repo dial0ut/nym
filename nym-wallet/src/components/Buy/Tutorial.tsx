@@ -48,6 +48,7 @@ export const Tutorial = () => {
               <ModalDivider />
               <Typography>
                 When asked for signature, copy Bity’s message and{' '}
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <Link
                   component="button"
                   variant="body1"
