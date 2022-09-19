@@ -1,8 +1,10 @@
+use std::convert::TryFrom;
 use std::fs::File;
 use std::path::Path;
 
 use chrono::{DateTime, Utc};
 use log::info;
+use maxminddb::Reader;
 use serde::{Deserialize, Serialize};
 
 use crate::client::ThreadsafeValidatorClient;
@@ -20,6 +22,7 @@ use crate::validators::models::ThreadsafeValidatorCache;
 
 // TODO: change to an environment variable with a default value
 const STATE_FILE: &str = "explorer-api-state.json";
+const GEOIP_DB_PATH: &str = "./src/buy_terms/GeoLite2-Country.mmdb";
 
 #[derive(Clone)]
 pub struct ExplorerApiState {
@@ -114,4 +117,24 @@ impl ExplorerApiStateContext {
 
 fn get_state_file_path() -> String {
     std::env::var("API_STATE_FILE").unwrap_or_else(|_| STATE_FILE.to_string())
+}
+
+// The current State implementation does not allow to fail on state
+// creation, ie. returning Result<>. To avoid to use unwrap family,
+// as a workaround, wrap the state inside an Option<>
+// If Reader::open_readfile fails for some reason db will will be set to None
+// and an error will be logged.
+pub struct GeoIp {
+    pub db: Option<Reader<Vec<u8>>>,
+}
+
+impl GeoIp {
+    pub fn new() -> Self {
+        let reader = Reader::open_readfile(GEOIP_DB_PATH)
+            .map_err(|e| {
+                error!("Fail to open GeoLite2 db file {}: {}", GEOIP_DB_PATH, e);
+            })
+            .ok();
+        GeoIp { db: reader }
+    }
 }

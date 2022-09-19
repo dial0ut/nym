@@ -1709,6 +1709,7 @@ dependencies = [
  "isocountry",
  "itertools",
  "log",
+ "maxminddb",
  "mixnet-contract-common",
  "network-defaults",
  "okapi",
@@ -2704,6 +2705,15 @@ checksum = "879d54834c8c76457ef4293a689b2a8c59b076067ad77b15efafbb05f92a592b"
 
 [[package]]
 name = "ipnetwork"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4088d739b183546b239688ddbc79891831df421773df95e236daf7867866d355"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "ipnetwork"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf466541e9d546596ee94f9f69590f89473455f88372423e0008fc1a7daf100e"
@@ -2932,6 +2942,18 @@ name = "matchit"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "73cbba799671b762df5a175adf59ce145165747bb891505c43d09aefbbf38beb"
+
+[[package]]
+name = "maxminddb"
+version = "0.23.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe2ba61113f9f7a9f0e87c519682d39c43a6f3f79c2cc42c3ba3dda83b1fa334"
+dependencies = [
+ "ipnetwork 0.18.0",
+ "log",
+ "memchr",
+ "serde",
+]
 
 [[package]]
 name = "maybe-uninit"
@@ -3365,7 +3387,7 @@ dependencies = [
  "clap 3.2.20",
  "dirs",
  "futures",
- "ipnetwork",
+ "ipnetwork 0.20.0",
  "log",
  "network-defaults",
  "nymsphinx",
@@ -6720,7 +6742,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
 name = "vesting-contract"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "cosmwasm-std",
  "cw-storage-plus",
