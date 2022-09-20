@@ -28,7 +28,7 @@ fn find_location(request: &Request<'_>) -> Result<Location, (Status, LocationErr
     let geo_ip = &request
         .rocket()
         .state::<ExplorerApiStateContext>()
-        .ok_or((Status::InternalServerError, LocationError::InternalError))? // should never fails
+        .ok_or((Status::InternalServerError, LocationError::InternalError))? // should never fail
         .inner
         .geo_ip;
 
