@@ -17,7 +17,7 @@ impl GeoLocateTask {
     }
 
     pub(crate) fn start(mut self) {
-        if ::std::env::var("GEO_IP_SERVICE_API_KEY").is_err() {
+        if std::env::var("GEO_IP_SERVICE_API_KEY").is_err() {
             error!(
                 "Env var GEO_IP_SERVICE_API_KEY is not set. Geolocation tasks will not be started."
             );
@@ -84,7 +84,7 @@ impl GeoLocateTask {
                         self.state
                             .inner
                             .mixnodes
-                            .set_location(&cache_item.mix_id(), Some(location))
+                            .set_location(cache_item.mix_id(), Some(location))
                             .await;
 
                         // one node has been located, so return out of the loop
@@ -95,7 +95,7 @@ impl GeoLocateTask {
                         self.state
                             .inner
                             .mixnodes
-                            .set_location(&cache_item.mix_id(), None)
+                            .set_location(cache_item.mix_id(), None)
                             .await;
                     }
                 },
