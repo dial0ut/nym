@@ -1,13 +1,12 @@
-use std::convert::TryFrom;
 use std::fs::File;
 use std::path::Path;
 
 use chrono::{DateTime, Utc};
 use log::info;
-use maxminddb::Reader;
 use serde::{Deserialize, Serialize};
 
 use crate::client::ThreadsafeValidatorClient;
+use crate::geo_ip::geo_ip::ThreadsafeGeoIp;
 use validator_client::models::MixNodeBondAnnotated;
 
 use crate::country_statistics::country_nodes_distribution::{
@@ -22,7 +21,6 @@ use crate::validators::models::ThreadsafeValidatorCache;
 
 // TODO: change to an environment variable with a default value
 const STATE_FILE: &str = "explorer-api-state.json";
-const GEOIP_DB_PATH: &str = "./src/buy_terms/GeoLite2-Country.mmdb";
 
 #[derive(Clone)]
 pub struct ExplorerApiState {
@@ -32,6 +30,7 @@ pub struct ExplorerApiState {
     pub(crate) mixnodes: ThreadsafeMixNodesCache,
     pub(crate) ping: ThreadsafePingCache,
     pub(crate) validators: ThreadsafeValidatorCache,
+    pub(crate) geo_ip: ThreadsafeGeoIp,
 
     // TODO: discuss with @MS whether this is an appropriate spot for it
     pub(crate) validator_client: ThreadsafeValidatorClient,
@@ -82,6 +81,7 @@ impl ExplorerApiStateContext {
                 ping: ThreadsafePingCache::new(),
                 validators: ThreadsafeValidatorCache::new(),
                 validator_client: ThreadsafeValidatorClient::new(),
+                geo_ip: ThreadsafeGeoIp::new(),
             }
         } else {
             warn!(
@@ -97,6 +97,7 @@ impl ExplorerApiStateContext {
                 ping: ThreadsafePingCache::new(),
                 validators: ThreadsafeValidatorCache::new(),
                 validator_client: ThreadsafeValidatorClient::new(),
+                geo_ip: ThreadsafeGeoIp::new(),
             }
         }
     }
@@ -117,24 +118,4 @@ impl ExplorerApiStateContext {
 
 fn get_state_file_path() -> String {
     std::env::var("API_STATE_FILE").unwrap_or_else(|_| STATE_FILE.to_string())
-}
-
-// The current State implementation does not allow to fail on state
-// creation, ie. returning Result<>. To avoid to use unwrap family,
-// as a workaround, wrap the state inside an Option<>
-// If Reader::open_readfile fails for some reason db will will be set to None
-// and an error will be logged.
-pub struct GeoIp {
-    pub db: Option<Reader<Vec<u8>>>,
-}
-
-impl GeoIp {
-    pub fn new() -> Self {
-        let reader = Reader::open_readfile(GEOIP_DB_PATH)
-            .map_err(|e| {
-                error!("Fail to open GeoLite2 db file {}: {}", GEOIP_DB_PATH, e);
-            })
-            .ok();
-        GeoIp { db: reader }
-    }
 }

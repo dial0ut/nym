@@ -14,7 +14,6 @@ use crate::mix_nodes::http::mix_nodes_make_default_routes;
 use crate::overview::http::overview_make_default_routes;
 use crate::ping::http::ping_make_default_routes;
 use crate::state::ExplorerApiStateContext;
-use crate::state::GeoIp;
 use crate::validators::http::validators_make_default_routes;
 
 mod swagger;
@@ -65,7 +64,6 @@ fn configure_rocket(state: ExplorerApiStateContext) -> Rocket<Build> {
         .mount("/swagger", make_swagger_ui(&get_docs()))
         .register("/", catchers![not_found])
         .manage(state)
-        .manage(GeoIp::new())
         .attach(cors)
 }
 
