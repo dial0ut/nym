@@ -13,6 +13,8 @@ import {
   simulateVestingUnbondGateway,
   simulateVestingUnbondMixnode,
 } from '../../../requests';
+import { ConfirmationModal } from '../../Modals/ConfirmationModal';
+import { Error } from '../../Error';
 
 interface Props {
   node: TBondedMixnode | TBondedGateway;
