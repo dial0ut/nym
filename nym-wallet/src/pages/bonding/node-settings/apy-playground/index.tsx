@@ -1,28 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Button, Card, CardContent, CardHeader, Grid, TextField, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { ResultsTable } from 'src/components/RewardsPlayground/ResultsTable';
 import { computeMixnodeRewardEstimation } from 'src/requests';
 import { NodeDetails } from 'src/components/RewardsPlayground/NodeDetail';
-import { Inputs, InputValues } from 'src/components/RewardsPlayground/Inputs';
+import { Inputs } from 'src/components/RewardsPlayground/Inputs';
 
 const MAJOR_AMOUNT_FOR_CALCS = 1000;
 
 export const ApyPlayground = () => {
-  const [inputValues, setInputValues] = useState<InputValues>([
-    { label: 'Profit margin', name: 'profitMargin', isPercentage: true },
-    { label: 'Operator cost', name: 'operatorCost' },
-    { label: 'Bond', name: 'bond' },
-    { label: 'Delegations', name: 'delegations' },
-    { label: 'Uptime', name: 'uptime', isPercentage: true },
-  ]);
-
   const [results, setResults] = useState({
     total: { daily: '-', monthly: '-', yearly: '-' },
     operator: { daily: '-', monthly: '-', yearly: '-' },
     delegator: { daily: '-', monthly: '-', yearly: '-' },
   });
-
-  const getInputValue = (inputName: string) => inputValues.find((input) => input.name === inputName);
 
   const handleCalculate = async () => {
     try {
@@ -80,7 +70,7 @@ export const ApyPlayground = () => {
           }
         />
         <CardContent>
-          <Inputs inputValues={inputValues} onCalculate={handleCalculate} />
+          <Inputs onCalculate={handleCalculate} />
         </CardContent>
       </Card>
       <Grid container spacing={3}>
