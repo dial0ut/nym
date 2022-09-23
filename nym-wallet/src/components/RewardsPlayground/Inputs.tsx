@@ -11,6 +11,11 @@ export type InputFields = {
   isPercentage?: boolean;
 }[];
 
+export type calculateArgs = {
+  bond: string;
+  delegations: string;
+};
+
 const inputFields: InputFields = [
   { label: 'Profit margin', name: 'profitMargin', isPercentage: true },
   { label: 'Operator cost', name: 'operatorCost' },
@@ -19,8 +24,12 @@ const inputFields: InputFields = [
   { label: 'Uptime', name: 'uptime', isPercentage: true },
 ];
 
-export const Inputs = ({ onCalculate }: { onCalculate: () => Promise<void> }) => {
+export const Inputs = ({ onCalculate }: { onCalculate: (args: calculateArgs) => Promise<void> }) => {
   const { bondedNode } = useBondingContext();
+
+  const handleCalculate = (args: calculateArgs) => {
+    onCalculate;
+  };
 
   const {
     register,
@@ -30,7 +39,7 @@ export const Inputs = ({ onCalculate }: { onCalculate: () => Promise<void> }) =>
     resolver: yupResolver(inputValidationSchema),
     defaultValues: {
       profitMargin: bondedNode?.profitMargin || '',
-      uptime: '',
+      uptime: 100,
       bond: bondedNode?.bond.amount || '',
       delegations: '',
       operatorCost: '',
@@ -58,7 +67,7 @@ export const Inputs = ({ onCalculate }: { onCalculate: () => Promise<void> }) =>
         <Button
           variant="contained"
           disableElevation
-          onClick={handleSubmit(onCalculate)}
+          onClick={handleSubmit(handleCalculate)}
           size="large"
           fullWidth
           disabled={Boolean(Object.keys(errors).length)}

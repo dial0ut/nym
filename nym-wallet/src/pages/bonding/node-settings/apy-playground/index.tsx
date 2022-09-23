@@ -3,7 +3,7 @@ import { Box, Card, CardContent, CardHeader, Grid, Typography } from '@mui/mater
 import { ResultsTable } from 'src/components/RewardsPlayground/ResultsTable';
 import { computeMixnodeRewardEstimation } from 'src/requests';
 import { NodeDetails } from 'src/components/RewardsPlayground/NodeDetail';
-import { Inputs } from 'src/components/RewardsPlayground/Inputs';
+import { Inputs, calculateArgs } from 'src/components/RewardsPlayground/Inputs';
 
 const MAJOR_AMOUNT_FOR_CALCS = 1000;
 
@@ -14,14 +14,14 @@ export const ApyPlayground = () => {
     delegator: { daily: '-', monthly: '-', yearly: '-' },
   });
 
-  const handleCalculate = async () => {
+  const handleCalculate = async ({ bond, delegations }: calculateArgs) => {
     try {
       const res = await computeMixnodeRewardEstimation({
-        identity: 'DLdMKLPywEy1vnu3yPrtXvzY7fw1puiiHpA9n9UQatiQ',
-        uptime: 0,
+        identity: '',
+        uptime: 10,
         isActive: true,
-        pledgeAmount: Math.floor(0 * 1_000_000),
-        totalDelegation: Math.floor(0 * 1_000_000),
+        pledgeAmount: Math.floor(+bond * 1_000_000),
+        totalDelegation: Math.floor(+delegations * 1_000_000),
       });
 
       const operatorReward = (res.estimated_operator_reward / 1_000_000) * 24; // epoch_reward * 1 epoch_per_hour * 24 hours
