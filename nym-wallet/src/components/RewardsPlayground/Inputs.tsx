@@ -28,7 +28,7 @@ export const Inputs = ({ onCalculate }: { onCalculate: (args: calculateArgs) => 
   const { bondedNode } = useBondingContext();
 
   const handleCalculate = (args: calculateArgs) => {
-    onCalculate;
+    onCalculate({ bond: args.bond, delegations: args.delegations });
   };
 
   const {

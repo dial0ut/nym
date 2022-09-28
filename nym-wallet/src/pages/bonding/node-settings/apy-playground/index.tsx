@@ -4,10 +4,17 @@ import { ResultsTable } from 'src/components/RewardsPlayground/ResultsTable';
 import { computeMixnodeRewardEstimation } from 'src/requests';
 import { NodeDetails } from 'src/components/RewardsPlayground/NodeDetail';
 import { Inputs, calculateArgs } from 'src/components/RewardsPlayground/Inputs';
+import { useBondingContext } from 'src/context';
+import { useDelegationContext } from 'src/context/delegations';
 
 const MAJOR_AMOUNT_FOR_CALCS = 1000;
 
 export const ApyPlayground = () => {
+  const { bondedNode } = useBondingContext();
+  const { totalDelegations } = useDelegationContext();
+
+  console.log(totalDelegations);
+
   const [results, setResults] = useState({
     total: { daily: '-', monthly: '-', yearly: '-' },
     operator: { daily: '-', monthly: '-', yearly: '-' },
@@ -17,7 +24,7 @@ export const ApyPlayground = () => {
   const handleCalculate = async ({ bond, delegations }: calculateArgs) => {
     try {
       const res = await computeMixnodeRewardEstimation({
-        identity: '',
+        identity: 'HsnGQDiTL9hfY4ZkCBWoVFDdVDQWXKaK9ojXSkmUT44z',
         uptime: 10,
         isActive: true,
         pledgeAmount: Math.floor(+bond * 1_000_000),
