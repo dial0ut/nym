@@ -50,3 +50,5 @@ export const computeMixnodeRewardEstimation = async (args: {
   pledgeAmount: number;
   totalDelegation: number;
 }) => invokeWrapper<any>('compute_mixnode_reward_estimation', args);
+
+export const getMixnodeUptime = async (mixId: number) => invokeWrapper<number>('get_mixnode_uptime', { mixId });

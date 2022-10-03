@@ -1,21 +1,21 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FeeDetails } from '@nymproject/types';
-import { Box, Typography, Stack, Button, Divider, IconButton } from '@mui/material';
+import { Box, Typography, Stack, Divider, IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { ConfirmationDetailProps, ConfirmationDetailsModal } from 'src/components/Bonding/modals/ConfirmationModal';
+import { TestNode } from 'src/pages/bonding/node-settings/test-my-node';
 import { Node as NodeIcon } from 'src/svg-icons/node';
-import { NymCard } from '../../../components';
-import { PageLayout } from '../../../layouts';
 import { Tabs } from 'src/components/Tabs';
-import { useBondingContext, BondingContextProvider } from '../../../context';
 import { AppContext, urls } from 'src/context/main';
+import { useBondingContext, BondingContextProvider } from '../../../context';
 import { NodeGeneralSettings } from './general-settings';
 import { UnbondModal } from '../../../components/Bonding/modals/UnbondModal';
+import { NymCard } from '../../../components';
 import { nodeSettingsNav } from './node-settings.constant';
-import { TestNode } from 'src/pages/bonding/node-settings/test-my-node';
 import { ApyPlayground } from './apy-playground';
+import { PageLayout } from '../../../layouts';
 
 export const NodeSettings = () => {
   const [confirmationDetails, setConfirmationDetails] = useState<ConfirmationDetailProps>();

@@ -21,6 +21,7 @@ const bondedMixnodeMock: TBondedMixnode = {
   mixPort: 1789,
   verlocPort: 1790,
   version: '1.0.2',
+  uptime: 0,
 };
 
 const bondedGatewayMock: TBondedGateway = {

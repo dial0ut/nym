@@ -28,6 +28,7 @@ import {
   getPendingOperatorRewards,
   getMixnodeStakeSaturation,
   vestingClaimOperatorReward,
+  getMixnodeUptime,
 } from '../requests';
 import { useCheckOwnership } from '../hooks/useCheckOwnership';
 import { AppContext } from './main';
@@ -50,6 +51,7 @@ export type TBondedMixnode = {
   mixPort: number;
   verlocPort: number;
   version: string;
+  uptime: number;
 };
 
 export interface TBondedGateway {
@@ -124,13 +126,16 @@ export const BondingContextProvider = ({ children }: { children?: React.ReactNod
   };
 
   const getAdditionalMixnodeDetails = async (mixId: number) => {
-    const additionalDetails: { status: MixnodeStatus; stakeSaturation: string } = {
+    const additionalDetails: { status: MixnodeStatus; stakeSaturation: string; uptime: number } = {
       status: 'not_found',
       stakeSaturation: '0',
+      uptime: 0,
     };
     try {
       const statusResponse = await getMixnodeStatus(mixId);
+      const uptime = await getMixnodeUptime(mixId);
       additionalDetails.status = statusResponse.status;
+      additionalDetails.uptime = uptime;
     } catch (e) {
       Console.log(e);
     }
@@ -166,7 +171,7 @@ export const BondingContextProvider = ({ children }: { children?: React.ReactNod
           Console.warn(`get_operator_rewards request failed: ${e}`);
         }
         if (data) {
-          const { status, stakeSaturation } = await getAdditionalMixnodeDetails(data.bond_information.id);
+          const { status, stakeSaturation, uptime } = await getAdditionalMixnodeDetails(data.bond_information.id);
           const nodeDescription = await getNodeDescription(
             data.bond_information.mix_node.host,
             data.bond_information.mix_node.http_api_port,
@@ -184,6 +189,7 @@ export const BondingContextProvider = ({ children }: { children?: React.ReactNod
             delegators: data.rewarding_details.unique_delegations,
             proxy: data.bond_information.proxy,
             operatorRewards,
+            uptime,
             status,
             stakeSaturation,
             host: data.bond_information.mix_node.host.replace(/\s/g, ''),
