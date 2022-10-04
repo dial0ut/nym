@@ -14,8 +14,8 @@ import { AppContext, urls } from 'src/context/main';
 import { isGateway, isMixnode, TBondGatewayArgs, TBondMixNodeArgs } from 'src/types';
 import { BondedGateway } from 'src/components/Bonding/BondedGateway';
 import { RedeemRewardsModal } from 'src/components/Bonding/modals/RedeemRewardsModal';
-import { BondingContextProvider, useBondingContext } from '../../context';
 import { Box } from '@mui/material';
+import { BondingContextProvider, useBondingContext } from '../../context';
 
 const Bonding = () => {
   const [showModal, setShowModal] = useState<

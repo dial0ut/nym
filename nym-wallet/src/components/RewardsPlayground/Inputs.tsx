@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
@@ -30,11 +30,11 @@ export const Inputs = ({
   defaultValues,
 }: {
   onCalculate: (args: CalculateArgs) => Promise<void>;
-  defaultValues: DefaultInputValues | undefined;
+  defaultValues: DefaultInputValues;
 }) => {
-  const handleCalculate = async (args: CalculateArgs) => {
+  const handleCalculate = useCallback(async (args: CalculateArgs) => {
     onCalculate({ bond: args.bond, delegations: args.delegations, uptime: args.uptime });
-  };
+  }, []);
 
   const {
     register,
@@ -44,6 +44,10 @@ export const Inputs = ({
     resolver: yupResolver(inputValidationSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    handleCalculate(defaultValues);
+  }, [defaultValues, handleCalculate]);
 
   return (
     <Grid container spacing={3}>
