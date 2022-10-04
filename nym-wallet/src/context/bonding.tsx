@@ -37,6 +37,7 @@ import { attachDefaultOperatingCost, toPercentFloatString, toPercentIntegerStrin
 // TODO add relevant data
 export type TBondedMixnode = {
   name?: string;
+  id: number;
   identityKey: string;
   stake: DecCoin;
   bond: DecCoin;
@@ -177,6 +178,7 @@ export const BondingContextProvider = ({ children }: { children?: React.ReactNod
             data.bond_information.mix_node.http_api_port,
           );
           setBondedNode({
+            id: data.bond_information.id,
             name: nodeDescription?.name,
             identityKey: data.bond_information.mix_node.identity_key,
             ip: '',

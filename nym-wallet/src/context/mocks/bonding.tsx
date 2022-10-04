@@ -7,6 +7,7 @@ import { mockSleep } from './utils';
 const SLEEP_MS = 1000;
 
 const bondedMixnodeMock: TBondedMixnode = {
+  id: 1,
   name: 'Monster node',
   identityKey: '7mjM2fYbtN6kxMwp1TrmQ4VwPks3URR5pBgWPWhzT98F',
   stake: { denom: 'nym', amount: '1234' },
