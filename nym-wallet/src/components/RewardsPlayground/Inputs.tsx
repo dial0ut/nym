@@ -45,10 +45,6 @@ export const Inputs = ({
     defaultValues,
   });
 
-  useEffect(() => {
-    handleCalculate(defaultValues);
-  }, [defaultValues, handleCalculate]);
-
   return (
     <Grid container spacing={3}>
       {inputFields.map((field) => (

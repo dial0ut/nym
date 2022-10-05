@@ -4,7 +4,6 @@ import { SelectionChance } from '@nymproject/types';
 import { InclusionProbability } from './InclusionProbability';
 
 const computeSelectionProbability = (saturation: number): SelectionChance => {
-  console.log(saturation);
   if (saturation < 5) return 'Low';
 
   if (saturation > 5 && saturation < 15) return 'Good';
