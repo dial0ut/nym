@@ -53,7 +53,7 @@ pub async fn mixnode_reward_estimation(
 
 #[tauri::command]
 pub async fn compute_mixnode_reward_estimation(
-    identity: &str,
+    mix_id: NodeId,
     performance: Option<Performance>,
     active_in_rewarded_set: Option<bool>,
     pledge_amount: Option<u64>,
@@ -67,7 +67,7 @@ pub async fn compute_mixnode_reward_estimation(
         total_delegation,
     };
     Ok(api_client!(state)
-        .compute_mixnode_reward_estimation(identity, &request_body)
+        .compute_mixnode_reward_estimation(mix_id, &request_body)
         .await?)
 }
 
