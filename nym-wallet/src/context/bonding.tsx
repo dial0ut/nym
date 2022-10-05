@@ -56,7 +56,8 @@ export type TBondedMixnode = {
 };
 
 export interface TBondedGateway {
-  name: string;
+  name?: string;
+  id: number;
   identityKey: string;
   ip: string;
   bond: DecCoin;

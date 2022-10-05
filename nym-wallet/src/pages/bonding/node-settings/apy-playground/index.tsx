@@ -6,9 +6,7 @@ import { NodeDetails } from 'src/components/RewardsPlayground/NodeDetail';
 import { Inputs, CalculateArgs } from 'src/components/RewardsPlayground/Inputs';
 import { TBondedMixnode, useBondingContext } from 'src/context';
 import { isMixnode } from 'src/types';
-import { handleCalculate } from './utils';
-
-const MAJOR_AMOUNT_FOR_CALCS = 1000;
+import { handleCalculatePeriodRewards } from './utils';
 
 export type DefaultInputValues = {
   profitMargin: string;
@@ -34,7 +32,9 @@ export const ApyPlayground = () => {
     const delegations = await getDelegationSummary();
     const res = await getMixnodeRewardEstimation(node.id);
 
-    setResults(handleCalculate(res.estimation.operator, res.estimation.delegates, res.estimation.total_node_reward));
+    setResults(
+      handleCalculatePeriodRewards(res.estimation.operator, res.estimation.delegates, res.estimation.total_node_reward),
+    );
     setStakeSaturation(node.stakeSaturation);
     setDefaultInputValues({
       profitMargin: node.profitMargin,
@@ -54,14 +54,14 @@ export const ApyPlayground = () => {
   const handleCalculateEstimate = async ({ bond, delegations, uptime }: CalculateArgs) => {
     try {
       const estimatedRewards = await computeMixnodeRewardEstimation({
-        identity: bondedNode!.identityKey,
+        mixId: bondedNode!.id,
         performance: (parseInt(uptime, 10) / 100).toString(),
         isActive: true,
         pledgeAmount: Math.floor(+bond * 1_000_000),
         totalDelegation: Math.floor(+delegations * 1_000_000),
       });
 
-      const estimationResult = handleCalculate(
+      const estimationResult = handleCalculatePeriodRewards(
         estimatedRewards.estimation.delegates,
         estimatedRewards.estimation.operator,
         estimatedRewards.estimation.total_node_reward,

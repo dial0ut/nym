@@ -45,7 +45,7 @@ export const getNodeDescription = async (host: string, port: number) =>
   invokeWrapper<TNodeDescription>('get_mix_node_description', { host, port });
 
 export const computeMixnodeRewardEstimation = async (args: {
-  identity: string;
+  mixId: number;
   performance: string;
   isActive: boolean;
   pledgeAmount: number;

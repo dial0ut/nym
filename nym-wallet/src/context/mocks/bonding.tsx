@@ -26,6 +26,7 @@ const bondedMixnodeMock: TBondedMixnode = {
 };
 
 const bondedGatewayMock: TBondedGateway = {
+  id: 1,
   name: 'Monster node',
   identityKey: 'WayM2fYbtN6kxMwp1TrmQ4VwPks3URR5pBgWPWhzT98F',
   ip: '112.43.234.57',
