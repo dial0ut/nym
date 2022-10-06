@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
+import { decimalToPercentage } from '@nymproject/types';
 import { ResultsTable } from 'src/components/RewardsPlayground/ResultsTable';
-import { computeMixnodeRewardEstimation, getDelegationSummary, getMixnodeRewardEstimation } from 'src/requests';
+import { computeMixnodeRewardEstimation, getCurrentRewardingParameter, getDelegationSummary } from 'src/requests';
 import { NodeDetails } from 'src/components/RewardsPlayground/NodeDetail';
 import { Inputs, CalculateArgs } from 'src/components/RewardsPlayground/Inputs';
 import { TBondedMixnode, useBondingContext } from 'src/context';
@@ -72,6 +73,10 @@ export const ApyPlayground = () => {
         pledgeAmount: Math.floor(+bond * 1_000_000),
         totalDelegation: Math.floor(+delegations * 1_000_000),
       });
+      const rewardParams = await getCurrentRewardingParameter();
+
+      const computedStakeSaturation =
+        (+bond * 1_000_000 + +delegations * 1_000_000) / Math.round(+rewardParams.interval.stake_saturation_point);
 
       const estimationResult = handleCalculatePeriodRewards({
         estimatedOperatorReward: res.estimation.operator,
@@ -80,7 +85,7 @@ export const ApyPlayground = () => {
         bondAmount: bond,
       });
 
-      setStakeSaturation('0');
+      setStakeSaturation(decimalToPercentage(computedStakeSaturation.toString()));
 
       setResults(estimationResult);
     } catch (e) {
