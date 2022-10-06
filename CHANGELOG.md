@@ -10,6 +10,7 @@ Post 1.0.0 release, the changelog format is based on [Keep a Changelog](https://
 - validator-client: added `query_contract_smart` and `query_contract_raw` on `NymdClient` ([#1558])
 - network-requester: added additional Blockstream Green wallet endpoint to `example.allowed.list` ([#1611](https://github.com/nymtech/nym/pull/1611))
 - common/ledger: new library for communicating with a Ledger device ([#1640])
+- native-client/socks5-client: `disable_main_poisson_packet_distribution` Debug config option to make the client ignore poisson distribution in the main packet stream and ONLY send real message (and as fast as they come) ([#1664])
 
 ### Fixed
 
@@ -28,6 +29,7 @@ Post 1.0.0 release, the changelog format is based on [Keep a Changelog](https://
 [#1591]: https://github.com/nymtech/nym/pull/1591
 [#1640]: https://github.com/nymtech/nym/pull/1640
 [#1645]: https://github.com/nymtech/nym/pull/1645
+[#1664]: https://github.com/nymtech/nym/pull/1664
 
 
 ## [nym-binaries-1.0.2](https://github.com/nymtech/nym/tree/nym-binaries-1.0.2)
