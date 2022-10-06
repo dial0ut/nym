@@ -30,10 +30,22 @@ export const ApyPlayground = () => {
 
   const initialise = async (node: TBondedMixnode) => {
     const delegations = await getDelegationSummary();
-    const res = await getMixnodeRewardEstimation(node.id);
+
+    const res = await computeMixnodeRewardEstimation({
+      mixId: node.id,
+      performance: (node.uptime / 100).toString(),
+      isActive: true,
+      pledgeAmount: Math.floor(+node.bond.amount * 1_000_000),
+      totalDelegation: Math.floor(+delegations.total_delegations.amount * 1_000_000),
+    });
 
     setResults(
-      handleCalculatePeriodRewards(res.estimation.operator, res.estimation.delegates, res.estimation.total_node_reward),
+      handleCalculatePeriodRewards({
+        estimatedOperatorReward: res.estimation.operator,
+        estimatedDelegatorsReward: res.estimation.delegates,
+        totalDelegation: delegations.total_delegations.amount,
+        bondAmount: node.bond.amount,
+      }),
     );
     setStakeSaturation(node.stakeSaturation);
     setDefaultInputValues({
@@ -41,7 +53,7 @@ export const ApyPlayground = () => {
       uptime: (node.uptime || 0).toString(),
       bond: node.bond.amount || '',
       delegations: delegations.total_delegations.amount,
-      operatorCost: Math.floor(res.estimation.operating_cost / 1_000_000).toString(),
+      operatorCost: (res.estimation.operating_cost / 1_000_000).toFixed(3).toString(),
     });
   };
 
@@ -53,7 +65,7 @@ export const ApyPlayground = () => {
 
   const handleCalculateEstimate = async ({ bond, delegations, uptime }: CalculateArgs) => {
     try {
-      const estimatedRewards = await computeMixnodeRewardEstimation({
+      const res = await computeMixnodeRewardEstimation({
         mixId: bondedNode!.id,
         performance: (parseInt(uptime, 10) / 100).toString(),
         isActive: true,
@@ -61,11 +73,12 @@ export const ApyPlayground = () => {
         totalDelegation: Math.floor(+delegations * 1_000_000),
       });
 
-      const estimationResult = handleCalculatePeriodRewards(
-        estimatedRewards.estimation.delegates,
-        estimatedRewards.estimation.operator,
-        estimatedRewards.estimation.total_node_reward,
-      );
+      const estimationResult = handleCalculatePeriodRewards({
+        estimatedOperatorReward: res.estimation.operator,
+        estimatedDelegatorsReward: res.estimation.delegates,
+        totalDelegation: delegations,
+        bondAmount: bond,
+      });
 
       setStakeSaturation('0');
 

@@ -1,23 +1,35 @@
-export const handleCalculatePeriodRewards = (operatorReward: number, delegatorsReward: number, totalReward: number) => {
-  const dailyOperatorReward = (operatorReward / 1_000_000) * 24; // epoch_reward * 1 epoch_per_hour * 24 hours
-  const dailyDelegatorReward = (delegatorsReward / 1_000_000) * 24;
-  const dailyTotal = (totalReward / 1_000_000) * 24;
+export const handleCalculatePeriodRewards = ({
+  estimatedOperatorReward,
+  estimatedDelegatorsReward,
+  totalDelegation,
+  bondAmount,
+}: {
+  estimatedOperatorReward: number;
+  estimatedDelegatorsReward: number;
+  totalDelegation: string;
+  bondAmount: string;
+}) => {
+  const dailyOperatorReward = (estimatedOperatorReward / 1_000_000) * 24; // epoch_reward * 1 epoch_per_hour * 24 hours
+  const dailyDelegatorReward = (estimatedDelegatorsReward / 1_000_000) * 24;
+  const operatorRewardScaled = 1000 * (dailyOperatorReward / +bondAmount);
+  const delegatorRewardScaled = 1000 * (dailyDelegatorReward / +totalDelegation);
+  const dailyTotal = operatorRewardScaled + delegatorRewardScaled;
 
   return {
     total: {
-      daily: Math.round(dailyTotal).toString(),
-      monthly: Math.round(dailyTotal * 30).toString(),
-      yearly: Math.round(dailyTotal * 365).toString(),
+      daily: dailyTotal.toFixed(3).toString(),
+      monthly: (dailyTotal * 30).toFixed(3).toString(),
+      yearly: (dailyTotal * 365).toFixed(3).toString(),
     },
     operator: {
-      daily: Math.round(dailyOperatorReward).toString(),
-      monthly: Math.round(dailyOperatorReward * 30).toString(),
-      yearly: Math.round(dailyOperatorReward * 365).toString(),
+      daily: operatorRewardScaled.toFixed(3).toString(),
+      monthly: (operatorRewardScaled * 30).toFixed(3).toString(),
+      yearly: (operatorRewardScaled * 365).toFixed(3).toString(),
     },
     delegator: {
-      daily: Math.round(dailyDelegatorReward).toString(),
-      monthly: Math.round(dailyDelegatorReward * 30).toString(),
-      yearly: Math.round(dailyDelegatorReward * 365).toString(),
+      daily: delegatorRewardScaled.toFixed(3).toString(),
+      monthly: (delegatorRewardScaled * 30).toFixed(3).toString(),
+      yearly: (delegatorRewardScaled * 365).toFixed(3).toString(),
     },
   };
 };
